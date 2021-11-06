@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import knex from 'knex'
 import { Model } from 'objection'
 import * as dbConfig from './database/config'
+import { routesList } from './routes'
 
 // load env vars from .env file
 dotenv.config()
@@ -26,6 +27,11 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 app.use(cookieParser())
+
+// set routes
+routesList.forEach(route => {
+    app.use(`/${route}`, require(`./routes/${route}`).router);
+});
 
 // start server
 app.listen(
